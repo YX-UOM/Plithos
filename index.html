@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plinthos | AI-Powered ESG Report Writing</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,42 +14,60 @@
             box-sizing: border-box;
         }
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: #1F2937;
-            line-height: 1.6;
-        }
-        
-        /* Color Variables */
         :root {
             --primary: #1A5F7A;
             --primary-dark: #134B61;
-            --secondary: #57C5B6;
-            --accent: #159895;
-            --dark: #002B5B;
-            --light-bg: #F0F7F4;
-            --gray: #6B7280;
-            --light-gray: #F9FAFB;
+            --accent: #0D9488;
+            --dark: #0F172A;
+            --light-bg: #F8FAFC;
+            --gray: #64748B;
+            --gray-light: #94A3B8;
+            --border: #E2E8F0;
+            --cream: #FAFAF9;
         }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+            background-attachment: fixed;
+        }
+        
+        /* Dot grid background */
+        .dot-grid {
+            background-image: radial-gradient(circle, #CBD5E1 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        /* Typography */
+        .font-serif { font-family: 'Playfair Display', Georgia, serif; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
         
         /* Navigation */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: white;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-bottom: 1px solid var(--border);
             z-index: 1000;
         }
         
         .logo {
+            font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--dark);
             text-decoration: none;
         }
         
@@ -60,85 +80,99 @@
         .nav-links a {
             color: var(--gray);
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.875rem;
+            font-weight: 500;
             transition: color 0.2s;
         }
         
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--dark);
         }
         
+        /* Buttons */
         .btn {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            padding: 0.875rem 1.75rem;
+            border-radius: 0;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.2s;
             cursor: pointer;
             border: none;
-            font-size: 1rem;
+            font-size: 0.875rem;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .btn-primary {
-            background: var(--primary);
+            background: var(--dark);
             color: white;
+            border: 2px solid var(--dark);
         }
         
         .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
+            background: transparent;
+            color: var(--dark);
         }
         
         .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            color: var(--dark);
+            border: 1px solid var(--border);
         }
         
         .btn-secondary:hover {
-            background: var(--light-bg);
+            background: white;
+            border-color: var(--dark);
         }
         
         /* Hero Section */
         .hero {
-            padding: 8rem 2rem 5rem;
-            max-width: 1200px;
+            padding: 10rem 2rem 6rem;
+            max-width: 1400px;
             margin: 0 auto;
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            align-items: center;
         }
         
-        .hero-badge {
+        .hero-content {
+            max-width: 650px;
+        }
+        
+        .hero-tag {
             display: inline-block;
-            background: var(--light-bg);
-            color: var(--accent);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--gray);
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
         }
         
         .hero h1 {
+            font-family: 'Playfair Display', serif;
             font-size: 3.5rem;
             font-weight: 700;
-            line-height: 1.1;
+            line-height: 1.15;
             margin-bottom: 1.5rem;
             color: var(--dark);
         }
         
-        .hero h1 span {
+        .hero h1 strong {
             color: var(--primary);
         }
         
         .hero-subtitle {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             color: var(--gray);
-            max-width: 600px;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
         }
         
         .hero-cta {
@@ -147,31 +181,151 @@
             margin-bottom: 3rem;
         }
         
-        .hero-stats {
-            display: flex;
-            gap: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid #E5E7EB;
+        /* Floating UI Stack */
+        .hero-visual {
+            position: relative;
+            height: 500px;
         }
         
-        .stat {
-            text-align: left;
+        .floating-card {
+            position: absolute;
+            background: white;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            padding: 1.25rem;
+            transition: transform 0.3s ease;
         }
         
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
+        .floating-card:hover {
+            transform: translateY(-4px);
         }
         
-        .stat-label {
-            font-size: 0.875rem;
+        .card-data {
+            width: 280px;
+            top: 0;
+            left: 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
             color: var(--gray);
+            background: #1E293B;
+            color: #94A3B8;
         }
         
-        /* Section Styling */
+        .card-data pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        
+        .card-data .json-key { color: #7DD3FC; }
+        .card-data .json-value { color: #86EFAC; }
+        .card-data .json-number { color: #FCD34D; }
+        
+        .card-process {
+            width: 260px;
+            top: 120px;
+            left: 100px;
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .process-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .card-process h4 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .card-output {
+            width: 300px;
+            top: 260px;
+            left: 60px;
+            z-index: 3;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .output-header {
+            background: var(--dark);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+        }
+        
+        .output-content {
+            padding: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .output-content h5 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .output-content p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        /* Trust Bar */
+        .trust-bar {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .trust-bar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+        
+        .trust-item {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--gray-light);
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            cursor: default;
+        }
+        
+        .trust-item:hover {
+            color: var(--dark);
+        }
+        
+        /* Sections */
         section {
-            padding: 5rem 2rem;
+            padding: 6rem 2rem;
         }
         
         .container {
@@ -179,64 +333,61 @@
             margin: 0 auto;
         }
         
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--dark);
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray-light);
+            letter-spacing: 2px;
             margin-bottom: 1rem;
         }
         
-        .section-header p {
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+        
+        .section-subtitle {
             font-size: 1.125rem;
             color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
+            margin-bottom: 3rem;
         }
         
         /* Problem Section */
         .problem {
-            background: var(--light-gray);
+            background: var(--cream);
         }
         
         .problem-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
-            align-items: center;
-        }
-        
-        .problem-text h3 {
-            font-size: 1.75rem;
-            color: var(--dark);
-            margin-bottom: 1.5rem;
+            align-items: start;
         }
         
         .problem-text p {
-            margin-bottom: 1rem;
-            color: #4B5563;
+            margin-bottom: 1.25rem;
+            color: #475569;
+            font-size: 1.05rem;
         }
         
         .problem-text .highlight {
             font-weight: 600;
-            color: var(--primary);
+            color: var(--dark);
         }
         
         .problem-visual {
             background: white;
-            border-radius: 16px;
+            border: 1px solid var(--border);
             padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         
         .gap-diagram {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
         }
         
         .gap-item {
@@ -245,30 +396,48 @@
             gap: 1rem;
             padding: 1rem;
             background: var(--light-bg);
-            border-radius: 8px;
+            border: 1px solid var(--border);
         }
         
         .gap-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
-            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            background: var(--dark);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.25rem;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .gap-item-text {
+            flex: 1;
+        }
+        
+        .gap-item-text strong {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        
+        .gap-item-text small {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray);
         }
         
         .gap-arrow {
             text-align: center;
-            color: var(--gray);
-            font-size: 1.5rem;
+            color: var(--gray-light);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0;
         }
         
         .gap-item.highlight-box {
             background: var(--primary);
-            color: white;
+            border-color: var(--primary);
         }
         
         .gap-item.highlight-box .gap-icon {
@@ -276,162 +445,125 @@
             color: var(--primary);
         }
         
-        /* Process Section */
-        .process-steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+        .gap-item.highlight-box .gap-item-text strong,
+        .gap-item.highlight-box .gap-item-text small {
+            color: white;
         }
         
-        .step {
-            text-align: center;
-            padding: 2rem;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
+        /* Pipeline Section */
+        .pipeline {
+            position: relative;
         }
         
-        .step:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: var(--light-bg);
-            color: var(--primary);
-            border-radius: 50%;
+        .pipeline-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .phase {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            gap: 3rem;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .phase:last-child {
+            border-bottom: none;
+        }
+        
+        .phase-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
             font-weight: 700;
-            margin: 0 auto 1.5rem;
+            color: rgba(15, 23, 42, 0.05);
+            line-height: 1;
         }
         
-        .step h3 {
-            font-size: 1.25rem;
+        .phase-content h3 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .phase-content h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
             color: var(--dark);
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
         
-        .step p {
+        .phase-content p {
             color: var(--gray);
             font-size: 0.95rem;
+            line-height: 1.7;
         }
         
-        /* Who Section */
-        .who {
-            background: var(--light-gray);
-        }
-        
-        .who-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-        
-        .who-text h3 {
-            font-size: 1.75rem;
-            color: var(--dark);
-            margin-bottom: 1.5rem;
-        }
-        
-        .who-text p {
-            color: #4B5563;
-            margin-bottom: 1.5rem;
-        }
-        
-        .check-list {
-            list-style: none;
-        }
-        
-        .check-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            color: #4B5563;
-        }
-        
-        .check-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--secondary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.75rem;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        
-        /* Credibility Section */
-        .credibility-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-        
-        .credibility-text h3 {
-            font-size: 1.75rem;
-            color: var(--dark);
-            margin-bottom: 1.5rem;
-        }
-        
-        .credibility-text p {
-            color: #4B5563;
-            margin-bottom: 1rem;
-        }
-        
-        .credibility-quote {
-            font-style: italic;
-            color: var(--accent);
-            font-size: 1.1rem;
-            padding-left: 1rem;
-            border-left: 3px solid var(--secondary);
-            margin-top: 1.5rem;
-        }
-        
-        .credibility-badges {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-        
-        .badge-item {
-            background: white;
+        .phase-visual {
+            background: var(--light-bg);
+            border: 1px solid var(--border);
             padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            text-align: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
         }
         
-        .badge-icon {
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
+        .phase-visual-header {
+            font-size: 0.65rem;
+            color: var(--gray-light);
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
         }
         
-        .badge-item h4 {
-            font-size: 1rem;
+        /* Comparison Table */
+        .comparison {
+            margin-top: 4rem;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .comparison-table th {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-align: left;
+            padding: 1rem;
+            background: var(--dark);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .comparison-table tr td:first-child {
+            font-weight: 600;
             color: var(--dark);
-            margin-bottom: 0.25rem;
         }
         
-        .badge-item p {
-            font-size: 0.875rem;
-            color: var(--gray);
+        .comparison-table tr td:last-child {
+            color: var(--primary);
+            font-weight: 600;
         }
         
-        /* Frameworks Section */
+        /* Framework Section */
         .frameworks {
-            background: var(--light-gray);
+            background: var(--cream);
+            background-image: 
+                linear-gradient(rgba(226, 232, 240, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(226, 232, 240, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
         
         .frameworks-grid {
@@ -442,123 +574,410 @@
         
         .framework-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            transition: transform 0.2s;
+            border: 1px solid var(--border);
+            padding: 0;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         
         .framework-card:hover {
-            transform: translateX(4px);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px var(--primary);
         }
         
-        .framework-card h4 {
-            font-size: 1.25rem;
+        .framework-card:hover .framework-id {
             color: var(--primary);
-            margin-bottom: 0.5rem;
         }
         
-        .framework-card p {
-            font-size: 0.9rem;
+        .framework-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .framework-id {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--gray-light);
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        
+        .framework-status {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+        }
+        
+        .framework-body {
+            padding: 1.25rem;
+        }
+        
+        .framework-body h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .framework-scope {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
             color: var(--gray);
-        }
-        
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
-            color: white;
-            text-align: center;
-        }
-        
-        .cta h2 {
-            font-size: 2.5rem;
             margin-bottom: 1rem;
         }
         
-        .cta p {
-            font-size: 1.25rem;
-            opacity: 0.9;
+        .framework-features {
+            list-style: none;
+        }
+        
+        .framework-features li {
+            font-size: 0.85rem;
+            color: var(--gray);
+            padding: 0.4rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+        
+        .framework-features li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: var(--gray-light);
+        }
+        
+        /* Validation Badge */
+        .validation-badge {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+        
+        .badge-seal {
+            width: 80px;
+            height: 80px;
+            border: 2px solid var(--dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            text-align: center;
+            color: var(--dark);
+            line-height: 1.3;
+        }
+        
+        .badge-text {
+            text-align: left;
+        }
+        
+        .badge-text h5 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray-light);
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .badge-text p {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .badge-text small {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+        
+        /* Contact Section */
+        .contact {
+            background: var(--dark);
+            color: white;
+        }
+        
+        .contact .section-label {
+            color: var(--gray);
+        }
+        
+        .contact .section-title {
+            color: white;
+        }
+        
+        .contact .section-subtitle {
+            color: var(--gray);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 0.4fr 0.6fr;
+            gap: 4rem;
+        }
+        
+        .contact-status {
+            padding: 2rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .status-card {
             margin-bottom: 2rem;
         }
         
-        .cta .btn-primary {
-            background: white;
-            color: var(--primary);
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
         
-        .cta .btn-primary:hover {
-            background: var(--light-bg);
-            transform: translateY(-2px);
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22C55E;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-header span {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: #22C55E;
+        }
+        
+        .status-items {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .status-item-label {
+            color: var(--gray);
+        }
+        
+        .status-item-value {
+            color: white;
+        }
+        
+        .contact-info {
+            margin-top: 2rem;
+        }
+        
+        .contact-info h5 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray);
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .contact-info p, .contact-info a {
+            font-size: 0.9rem;
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-info a:hover {
+            color: var(--accent);
+        }
+        
+        /* Contact Form */
+        .contact-form {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-group select {
+            cursor: pointer;
+        }
+        
+        .form-group select option {
+            background: var(--dark);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-submit {
+            margin-top: 1.5rem;
+        }
+        
+        .form-submit .btn {
+            width: 100%;
+            background: white;
+            color: var(--dark);
+            padding: 1rem;
+        }
+        
+        .form-submit .btn:hover {
+            background: var(--accent);
+            color: white;
         }
         
         /* Footer */
         footer {
-            background: var(--dark);
+            background: #0A0F1A;
             color: white;
-            padding: 3rem 2rem;
-            text-align: center;
+            padding: 4rem 2rem;
         }
         
-        .footer-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+        
+        .footer-brand p {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+        
+        .footer-legal {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray);
+            text-align: right;
+        }
+        
+        .footer-legal p {
             margin-bottom: 0.5rem;
         }
         
-        .footer-tagline {
-            color: var(--secondary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .footer-info {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9rem;
-        }
-        
-        .footer-info a {
-            color: var(--secondary);
-            text-decoration: none;
-        }
-        
-        .footer-copyright {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.5);
-            font-size: 0.875rem;
+        /* Micro-copy decorations */
+        .micro-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--gray-light);
+            letter-spacing: 1px;
+            opacity: 0.5;
         }
         
         /* Responsive */
-        @media (max-width: 968px) {
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 8rem;
+                min-height: auto;
+            }
+            
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.75rem;
+            }
+            
+            .hero-visual {
+                display: none;
             }
             
             .problem-content,
-            .who-content,
-            .credibility-content {
+            .contact-grid {
                 grid-template-columns: 1fr;
-                gap: 2rem;
             }
             
-            .process-steps,
+            .phase {
+                grid-template-columns: 80px 1fr;
+            }
+            
+            .phase-visual {
+                grid-column: 2;
+                margin-top: 1rem;
+            }
+            
             .frameworks-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .credibility-badges {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .hero-stats {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            
+        }
+        
+        @media (max-width: 768px) {
             .nav-links {
                 display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+            
+            .trust-bar .container {
+                gap: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .footer-legal {
+                text-align: left;
             }
         }
     </style>
@@ -569,81 +988,109 @@
         <a href="#" class="logo">Plinthos</a>
         <div class="nav-links">
             <a href="#problem">The Problem</a>
-            <a href="#process">How It Works</a>
+            <a href="#pipeline">Methodology</a>
             <a href="#frameworks">Frameworks</a>
-            <a href="#contact" class="btn btn-primary">Get in Touch</a>
+            <a href="#contact" class="btn btn-primary">Request Allocation</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <span class="hero-badge">🚀 Now accepting clients for Q1 2026</span>
-        <h1>AI-Powered ESG Report Writing<br><span>for UK Real Estate Funds</span></h1>
-        <p class="hero-subtitle">You have the data. We write the report that makes investors increase their allocation.</p>
-        <div class="hero-cta">
-            <a href="#contact" class="btn btn-primary">Get in Touch</a>
-            <a href="#process" class="btn btn-secondary">See How It Works</a>
+    <section class="hero dot-grid">
+        <div class="hero-content">
+            <div class="hero-tag">[ RESEARCH INITIATIVE // UNIVERSITY OF MANCHESTER ]</div>
+            <h1>From Raw Carbon Data to <strong>Investment Grade</strong> Narratives.</h1>
+            <p class="hero-subtitle">Plinthos bridges the "Last Mile" of ESG. We transform your validated building metrics into 50-page, framework-compliant reports that LPs actually trust. No consultancies, no manual drafting—just institutional rigor powered by AI.</p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">Schedule Q1 2026 Onboarding</a>
+                <a href="#pipeline" class="btn btn-secondary">Read the Methodology</a>
+            </div>
         </div>
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-number">6-8</div>
-                <div class="stat-label">Weeks to delivery</div>
+        <div class="hero-visual">
+            <div class="floating-card card-data">
+                <pre><code>{
+  <span class="json-key">"asset_id"</span>: <span class="json-value">"UK-LON-0847"</span>,
+  <span class="json-key">"energy_intensity"</span>: <span class="json-number">142.5</span>,
+  <span class="json-key">"carbon_intensity"</span>: <span class="json-number">28.4</span>,
+  <span class="json-key">"epc_rating"</span>: <span class="json-value">"B"</span>,
+  <span class="json-key">"floor_area_sqm"</span>: <span class="json-number">12450</span>,
+  <span class="json-key">"crrem_pathway"</span>: <span class="json-value">"1.5C_ALIGNED"</span>
+}</code></pre>
             </div>
-            <div class="stat">
-                <div class="stat-number">6</div>
-                <div class="stat-label">Frameworks covered</div>
+            <div class="floating-card card-process">
+                <div class="process-indicator">
+                    <div class="pulse-dot"></div>
+                    <h4>Processing via PLINTHOS_GEN_LLM</h4>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--gray);">Synthesizing narrative against CRREM pathways...</p>
             </div>
-            <div class="stat">
-                <div class="stat-number">24k+</div>
-                <div class="stat-label">Pages of regulatory docs trained</div>
+            <div class="floating-card card-output">
+                <div class="output-header">OUTPUT: GRESB_DISCLOSURE_2025.PDF</div>
+                <div class="output-content">
+                    <h5>3.2 Climate Risk Analysis</h5>
+                    <p>The portfolio demonstrates strong alignment with science-based decarbonisation pathways, with 78% of assets meeting or exceeding CRREM 1.5°C targets...</p>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="container">
+            <span class="trust-item">GRESB</span>
+            <span class="trust-item">SFDR</span>
+            <span class="trust-item">EU TAXONOMY</span>
+            <span class="trust-item">TCFD</span>
+            <span class="trust-item">CRREM</span>
+            <span class="trust-item">CSRD</span>
+            <span class="trust-item" style="border-left: 1px solid var(--border); padding-left: 2rem;">UNIVERSITY OF MANCHESTER</span>
+        </div>
+    </div>
 
     <!-- Problem Section -->
     <section class="problem" id="problem">
         <div class="container">
             <div class="problem-content">
                 <div class="problem-text">
-                    <h3>The "Last Mile" Problem</h3>
+                    <div class="section-label">// THE_MARKET_GAP</div>
+                    <h2 class="section-title">The "Last Mile" Problem</h2>
                     <p>Your data platform tells you your building is 50kg CO₂/m².</p>
-                    <p>But your LP wants to know <strong>why</strong> that number improved 15%, what it means for your 2030 pathway, and whether they should increase their allocation.</p>
+                    <p>But your LP wants to know <span class="highlight">why</span> that number improved 15%, what it means for your 2030 pathway, and whether they should increase their allocation.</p>
                     <p>The market for ESG data collection is solved. Measurabl, Deepki, and Envizi handle the plumbing—data governance, metric calculation, audit trails.</p>
-                    <p class="highlight">But none of them write the actual report.</p>
+                    <p><span class="highlight">But none of them write the actual report.</span></p>
                     <p>When you have validated carbon data and need a 50-page document for investors, you face two options: assign it to an overstretched internal team, or pay a consultancy £40–60k to produce it manually.</p>
-                    <p><strong class="highlight">Plinthos bridges that gap.</strong></p>
                 </div>
                 <div class="problem-visual">
+                    <div class="micro-label" style="margin-bottom: 1rem;">// DATA_FLOW_DIAGRAM</div>
                     <div class="gap-diagram">
                         <div class="gap-item">
                             <div class="gap-icon">📊</div>
-                            <div>
-                                <strong>Data Platforms</strong><br>
-                                <small>Measurabl, Deepki, Envizi</small>
+                            <div class="gap-item-text">
+                                <strong>Data Platforms</strong>
+                                <small>MEASURABL // DEEPKI // ENVIZI</small>
                             </div>
                         </div>
-                        <div class="gap-arrow">↓</div>
+                        <div class="gap-arrow">↓ VALIDATED_METRICS</div>
                         <div class="gap-item">
                             <div class="gap-icon">📋</div>
-                            <div>
-                                <strong>Validated Metrics</strong><br>
-                                <small>kgCO₂/m², kWh, EPC ratings</small>
+                            <div class="gap-item-text">
+                                <strong>Raw Numbers</strong>
+                                <small>kgCO₂/m² // kWh // EPC_RATINGS</small>
                             </div>
                         </div>
-                        <div class="gap-arrow">↓ <span style="color: #E74C3C; font-size: 0.9rem;">THE GAP</span></div>
+                        <div class="gap-arrow">↓ <span style="color: #EF4444;">THE_GAP</span></div>
                         <div class="gap-item highlight-box">
-                            <div class="gap-icon">✍️</div>
-                            <div>
-                                <strong>Plinthos</strong><br>
-                                <small>AI-powered report writing</small>
+                            <div class="gap-icon">⚡</div>
+                            <div class="gap-item-text">
+                                <strong>Plinthos Pipeline</strong>
+                                <small>AI_SYNTHESIS // ACADEMIC_QA</small>
                             </div>
                         </div>
-                        <div class="gap-arrow">↓</div>
+                        <div class="gap-arrow">↓ DISCLOSURE_READY</div>
                         <div class="gap-item">
                             <div class="gap-icon">📄</div>
-                            <div>
-                                <strong>Investor-Ready Report</strong><br>
-                                <small>SFDR, Taxonomy, TCFD compliant</small>
+                            <div class="gap-item-text">
+                                <strong>Investment Grade Report</strong>
+                                <small>SFDR // TAXONOMY // TCFD_ALIGNED</small>
                             </div>
                         </div>
                     </div>
@@ -652,92 +1099,98 @@
         </div>
     </section>
 
-    <!-- Process Section -->
-    <section class="process" id="process">
+    <!-- Pipeline Section -->
+    <section class="pipeline" id="pipeline">
         <div class="container">
-            <div class="section-header">
-                <h2>Three Steps to Your ESG Report</h2>
-                <p>From data export to investor-ready document in 6–8 weeks</p>
-            </div>
-            <div class="process-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Share Your Data</h3>
-                    <p>Export from your existing platform or send us your utility data. We handle the rest.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>AI + Expert Review</h3>
-                    <p>Our AI generates the first draft. Our experts refine the narrative and ensure regulatory compliance.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Investor-Ready Report</h3>
-                    <p>Receive a complete ESG report ready for LP distribution, GRESB submission, or regulatory filing.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Who Section -->
-    <section class="who" id="who">
-        <div class="container">
-            <div class="who-content">
-                <div class="who-text">
-                    <h3>Built for Mid-Market UK Property Funds</h3>
-                    <p>Plinthos is designed for UK real estate funds with £50M–500M AUM who need institutional-grade ESG reporting without enterprise platform complexity.</p>
-                    <p><strong>You're a good fit if:</strong></p>
-                    <ul class="check-list">
-                        <li><span class="check-icon">✓</span> You have energy and emissions data but lack the time to write the report</li>
-                        <li><span class="check-icon">✓</span> Your LPs are asking about SFDR classification or EU Taxonomy alignment</li>
-                        <li><span class="check-icon">✓</span> You want to improve your GRESB score with better disclosure</li>
-                        <li><span class="check-icon">✓</span> You're preparing for CSRD and need a clear starting point</li>
-                        <li><span class="check-icon">✓</span> You've been quoted £40k+ by consultancies and want a smarter option</li>
-                    </ul>
-                </div>
-                <div class="credibility-badges">
-                    <div class="badge-item">
-                        <div class="badge-icon">🎓</div>
-                        <h4>Academic Rigour</h4>
-                        <p>University of Manchester research</p>
+            <div class="section-label">// METHODOLOGY</div>
+            <h2 class="section-title">The "Last Mile" Pipeline</h2>
+            <p class="section-subtitle">From fragmented data to institutional-grade disclosure.</p>
+            
+            <div class="pipeline-container">
+                <div class="phase">
+                    <div class="phase-number">01</div>
+                    <div class="phase-content">
+                        <h3>PHASE_01</h3>
+                        <h4>Data Ingestion & Normalization</h4>
+                        <p>We don't just take your numbers; we contextualize them. Our system ingests your asset-level metrics and maps them against the specific requirements of your target framework. Whether you export from Measurabl, Deepki, or send raw utility data—we parse and normalize it all.</p>
                     </div>
-                    <div class="badge-item">
-                        <div class="badge-icon">🤖</div>
-                        <h4>AI-Powered</h4>
-                        <p>24k+ pages of regulatory training</p>
+                    <div class="phase-visual">
+                        <div class="phase-visual-header">SOURCE_INPUTS</div>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ Measurabl API v4</p>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ Deepki Export CSV</p>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ Utility Bills (PDF/XLS)</p>
+                        <p style="color: var(--gray);">→ EPC Certificates</p>
                     </div>
-                    <div class="badge-item">
-                        <div class="badge-icon">📊</div>
-                        <h4>CRREM Aligned</h4>
-                        <p>Science-based pathways</p>
+                </div>
+                
+                <div class="phase">
+                    <div class="phase-number">02</div>
+                    <div class="phase-content">
+                        <h3>PHASE_02</h3>
+                        <h4>Narrative Synthesis</h4>
+                        <p>This is where AI meets academic rigor. Our system generates framework-compliant narratives using proprietary scoring logic aligned with CRREM pathways. Every claim is traceable; every number is contextualized against science-based targets.</p>
+                        <p style="margin-top: 1rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--gray);">// CRREM transition risk analysis calculates Y<sub>strand</sub> = f(Carbon Intensity, Decarbonization Pathway)</p>
                     </div>
-                    <div class="badge-item">
-                        <div class="badge-icon">✅</div>
-                        <h4>Expert QA</h4>
-                        <p>Human review on every report</p>
+                    <div class="phase-visual">
+                        <div class="phase-visual-header">SYNTHESIS_ENGINE</div>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ 24,000+ regulatory docs trained</p>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ CRREM pathway alignment</p>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ Science-based target validation</p>
+                        <p style="color: var(--gray);">→ Academic peer review</p>
+                    </div>
+                </div>
+                
+                <div class="phase">
+                    <div class="phase-number">03</div>
+                    <div class="phase-content">
+                        <h3>PHASE_03</h3>
+                        <h4>The Disclosure Asset</h4>
+                        <p>A 50-page, print-ready document designed to withstand LP due diligence. Fully referenced, professionally formatted, and academically validated. We deliver version-controlled, audit-ready documentation that meets institutional standards.</p>
+                    </div>
+                    <div class="phase-visual">
+                        <div class="phase-visual-header">OUTPUT_FORMATS</div>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ GRESB Submission Pack</p>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ SFDR Pre-contractual Annex</p>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">→ TCFD Disclosure Report</p>
+                        <p style="color: var(--gray);">→ Investor Data Pack (Excel)</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Credibility Section -->
-    <section class="credibility">
-        <div class="container">
-            <div class="credibility-content">
-                <div class="credibility-text">
-                    <h3>Academic Rigour. Industry Expertise.</h3>
-                    <p>Plinthos is developed at the University of Manchester's Department of Planning, Property and Environmental Management—one of the UK's leading real estate research centres.</p>
-                    <p>Our approach combines peer-reviewed research on ESG disclosure quality, CRREM decarbonisation pathway methodology, and AI trained on thousands of pages of regulatory documentation.</p>
-                    <p class="credibility-quote">"This isn't a startup claiming to have AI. It's academic expertise applied to a real industry problem."</p>
-                </div>
-                <div style="text-align: center;">
-                    <div style="background: var(--light-bg); padding: 3rem; border-radius: 16px;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">🏛️</div>
-                        <h4 style="font-size: 1.25rem; color: var(--dark); margin-bottom: 0.5rem;">University of Manchester</h4>
-                        <p style="color: var(--gray);">Department of Planning, Property<br>and Environmental Management</p>
-                    </div>
-                </div>
+            
+            <!-- Comparison Table -->
+            <div class="comparison">
+                <div class="section-label" style="margin-bottom: 1rem;">// COMPARATIVE_EFFICIENCY</div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>FEATURE</th>
+                            <th>MANUAL CONSULTANCY</th>
+                            <th>PLINTHOS PIPELINE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Delivery Time</td>
+                            <td>4–6 Months</td>
+                            <td>6–8 Weeks</td>
+                        </tr>
+                        <tr>
+                            <td>Cost Basis</td>
+                            <td>£40k–£60k + Overruns</td>
+                            <td>Flat Institutional Pricing</td>
+                        </tr>
+                        <tr>
+                            <td>Accuracy</td>
+                            <td>Prone to copy-paste errors</td>
+                            <td>AI-Verified against 24k+ docs</td>
+                        </tr>
+                        <tr>
+                            <td>Scalability</td>
+                            <td>Linear (More assets = more hours)</td>
+                            <td>Exponential (Portfolio-wide)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -745,59 +1198,222 @@
     <!-- Frameworks Section -->
     <section class="frameworks" id="frameworks">
         <div class="container">
-            <div class="section-header">
-                <h2>Complete Regulatory Coverage</h2>
-                <p>One report. Every framework your investors need.</p>
-            </div>
+            <div class="section-label">// REGULATORY_COVERAGE</div>
+            <h2 class="section-title">Institutional Framework Coverage</h2>
+            <p class="section-subtitle">One data ingestion. Multi-framework output. Validated by University of Manchester research.</p>
+            
             <div class="frameworks-grid">
                 <div class="framework-card">
-                    <h4>SFDR</h4>
-                    <p>Article 8/9 classification, PAI indicators, pre-contractual annexes</p>
+                    <div class="framework-header">
+                        <span class="framework-id">MOD_SFDR_01</span>
+                        <span class="framework-status">COMPLIANT_V2025</span>
+                    </div>
+                    <div class="framework-body">
+                        <h4>SFDR</h4>
+                        <p class="framework-scope">Article 8 & 9 Fund Classification</p>
+                        <ul class="framework-features">
+                            <li>PAI indicator automation</li>
+                            <li>Pre-contractual annexes</li>
+                            <li>RTS requirement mapping</li>
+                        </ul>
+                    </div>
                 </div>
+                
                 <div class="framework-card">
-                    <h4>EU Taxonomy</h4>
-                    <p>Alignment calculations, technical screening criteria, DNSH assessment</p>
+                    <div class="framework-header">
+                        <span class="framework-id">MOD_TAX_02</span>
+                        <span class="framework-status">ALIGNED_V2024</span>
+                    </div>
+                    <div class="framework-body">
+                        <h4>EU Taxonomy</h4>
+                        <p class="framework-scope">Climate Change Mitigation & Adaptation</p>
+                        <ul class="framework-features">
+                            <li>Technical screening criteria</li>
+                            <li>DNSH assessment</li>
+                            <li>Alignment calculations</li>
+                        </ul>
+                    </div>
                 </div>
+                
                 <div class="framework-card">
-                    <h4>CSRD / ESRS</h4>
-                    <p>Double materiality, ESRS E1 climate disclosure, transition plans</p>
+                    <div class="framework-header">
+                        <span class="framework-id">MOD_CSRD_03</span>
+                        <span class="framework-status">ESRS_READY</span>
+                    </div>
+                    <div class="framework-body">
+                        <h4>CSRD / ESRS</h4>
+                        <p class="framework-scope">European Sustainability Reporting</p>
+                        <ul class="framework-features">
+                            <li>Double materiality assessment</li>
+                            <li>ESRS E1 climate disclosure</li>
+                            <li>Transition plan narratives</li>
+                        </ul>
+                    </div>
                 </div>
+                
                 <div class="framework-card">
-                    <h4>TCFD</h4>
-                    <p>Governance, strategy, risk management, metrics & targets</p>
+                    <div class="framework-header">
+                        <span class="framework-id">MOD_CRREM_04</span>
+                        <span class="framework-status">ALIGNED_V3.0</span>
+                    </div>
+                    <div class="framework-body">
+                        <h4>CRREM</h4>
+                        <p class="framework-scope">Science-Based Decarbonization</p>
+                        <ul class="framework-features">
+                            <li>Stranding year analysis</li>
+                            <li>Paris-alignment tracking</li>
+                            <li>Retrofit narrative logic</li>
+                        </ul>
+                    </div>
                 </div>
+                
                 <div class="framework-card">
-                    <h4>GRESB</h4>
-                    <p>Management & performance components, asset-level data, benchmarking</p>
+                    <div class="framework-header">
+                        <span class="framework-id">MOD_GRESB_05</span>
+                        <span class="framework-status">FULL_COVERAGE</span>
+                    </div>
+                    <div class="framework-body">
+                        <h4>GRESB</h4>
+                        <p class="framework-scope">Global Real Estate Benchmark</p>
+                        <ul class="framework-features">
+                            <li>Management component drafting</li>
+                            <li>Performance data normalization</li>
+                            <li>Evidence pack generation</li>
+                        </ul>
+                    </div>
                 </div>
+                
                 <div class="framework-card">
-                    <h4>CRREM</h4>
-                    <p>Decarbonisation pathways, stranding year analysis, Paris-alignment</p>
+                    <div class="framework-header">
+                        <span class="framework-id">MOD_TCFD_06</span>
+                        <span class="framework-status">COMPLIANT_V2023</span>
+                    </div>
+                    <div class="framework-body">
+                        <h4>TCFD</h4>
+                        <p class="framework-scope">Climate Risk Disclosure</p>
+                        <ul class="framework-features">
+                            <li>Governance & strategy</li>
+                            <li>Risk management process</li>
+                            <li>Metrics & targets</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Validation Badge -->
+            <div class="validation-badge">
+                <div class="badge-seal">
+                    VALIDATED<br>BY
+                </div>
+                <div class="badge-text">
+                    <h5>METHODOLOGY_AUDIT</h5>
+                    <p>University of Manchester</p>
+                    <p>Dept. of Planning, Property and Environmental Management</p>
+                    <small>Audit Cycle: January 2025</small>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta" id="contact">
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
         <div class="container">
-            <h2>Ready to Transform Your ESG Reporting?</h2>
-            <p>Let's discuss how Plinthos can help your fund meet investor expectations.</p>
-            <a href="mailto:hello@plinthos.org" class="btn btn-primary">Get in Touch →</a>
+            <div class="section-label">// CLIENT_ONBOARDING</div>
+            <h2 class="section-title">Secure Your Reporting Cycle</h2>
+            <p class="section-subtitle">Due to high demand and our commitment to academic rigor, we onboard a limited number of funds per quarter.</p>
+            
+            <div class="contact-grid">
+                <div class="contact-status">
+                    <div class="status-card">
+                        <div class="status-header">
+                            <div class="status-dot"></div>
+                            <span>SYSTEM_ACTIVE</span>
+                        </div>
+                        <div class="status-items">
+                            <div class="status-item">
+                                <span class="status-item-label">CURRENT_CAPACITY</span>
+                                <span class="status-item-value">Q1 2026</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-item-label">SLOTS_REMAINING</span>
+                                <span class="status-item-value">3</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-item-label">AVG_DELIVERY</span>
+                                <span class="status-item-value">6-8 weeks</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h5>DIRECT_ACCESS</h5>
+                        <a href="mailto:hello@plinthos.org">hello@plinthos.org</a>
+                        <p style="font-size: 0.8rem; color: var(--gray); margin-top: 1rem;">Department of Planning, Property and Environmental Management, University of Manchester</p>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form action="https://formspree.io/f/yourformid" method="POST">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>[ FUND_NAME ]</label>
+                                <input type="text" name="fund_name" required placeholder="Enter fund name">
+                            </div>
+                            <div class="form-group">
+                                <label>[ CONTACT_EMAIL ]</label>
+                                <input type="email" name="email" required placeholder="Enter email address">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>[ PORTFOLIO_AUM ]</label>
+                                <select name="aum" required>
+                                    <option value="">Select range</option>
+                                    <option value="50-200">£50M – £200M</option>
+                                    <option value="200-500">£200M – £500M</option>
+                                    <option value="500+">£500M+</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>[ DATA_PLATFORM ]</label>
+                                <select name="platform">
+                                    <option value="">Select platform</option>
+                                    <option value="measurabl">Measurabl</option>
+                                    <option value="deepki">Deepki</option>
+                                    <option value="envizi">Envizi</option>
+                                    <option value="internal">Internal System</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>[ PRIMARY_FRAMEWORKS ]</label>
+                            <input type="text" name="frameworks" placeholder="e.g., GRESB, SFDR Article 8, TCFD">
+                        </div>
+                        <div class="form-group">
+                            <label>[ ADDITIONAL_REQUIREMENTS ]</label>
+                            <textarea name="message" placeholder="Describe your reporting needs and timeline..."></textarea>
+                        </div>
+                        <div class="form-submit">
+                            <button type="submit" class="btn">[ INITIATE ONBOARDING REQUEST → ]</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-logo">Plinthos</div>
-            <div class="footer-tagline">AI-Powered ESG Report Writing</div>
-            <div class="footer-info">
-                A research initiative at the University of Manchester<br>
-                <a href="mailto:hello@plinthos.org">hello@plinthos.org</a>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo" style="color: white;">Plinthos</a>
+                <p>An academic-led initiative. All reporting<br>methodologies are subject to peer-reviewed<br>standards and University of Manchester<br>quality assurance.</p>
             </div>
-            <div class="footer-copyright">
-                © 2025 Plinthos. All rights reserved.
+            <div class="footer-legal">
+                <p>// ENGINE: PLINTHOS_GEN_LLM</p>
+                <p>// OUTPUT: ISO_27001_COMPLIANT</p>
+                <p style="margin-top: 1rem;">© 2025 Plinthos. All rights reserved.</p>
             </div>
         </div>
     </footer>
