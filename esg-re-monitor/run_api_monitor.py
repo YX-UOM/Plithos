@@ -1,25 +1,15 @@
 #!/usr/bin/env python3
 """
-ESG Monitor - Standalone API Version
+ESG Monitor - Standalone API Version (Rate-Limit Safe)
 
-This version uses the Anthropic API directly with web search tool enabled.
-Can be run standalone, via cron, or in GitHub Actions.
-
-Requirements:
-    pip install anthropic httpx python-docx
-
-Environment:
-    ANTHROPIC_API_KEY=your_api_key
-
-Usage:
-    python run_api_monitor.py
-    python run_api_monitor.py --days 14
+This version includes delays between API calls to avoid rate limits.
 """
 
 import argparse
 import json
 import os
 import sqlite3
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -36,47 +26,29 @@ except ImportError:
 OUTPUT_DIR = Path("outputs")
 DATABASE_PATH = Path("data/esg_monitor.db")
 
+# Reduced queries to stay within rate limits
 SEARCH_QUERIES = {
     "news": [
-        "ESG real estate news",
-        "sustainable buildings news", 
-        "net zero buildings real estate",
-        "green real estate investment",
-        "building decarbonization",
+        "ESG real estate news this week",
+        "net zero buildings news",
     ],
     "regulatory": [
-        "EU taxonomy real estate",
-        "CSRD real estate reporting",
-        "UK MEES regulations",
-        "SEC climate disclosure buildings",
-        "ISSB sustainability standards",
+        "EU taxonomy CSRD real estate 2025",
+        "UK MEES building regulations",
     ],
     "research": [
-        "GRESB real estate results",
-        "green building certification statistics",
-        "ESG property valuation study",
-        "carbon risk real estate report",
+        "GRESB real estate sustainability",
     ],
     "market": [
-        "green bond real estate",
-        "sustainable REIT news",
-        "PropTech sustainability",
-        "green building transaction",
+        "green bond real estate investment",
     ],
 }
 
-THEMES = [
-    "carbon_emissions",
-    "energy_efficiency",
-    "climate_risk", 
-    "regulation_compliance",
-    "green_finance",
-    "certification_ratings",
-    "proptech_innovation",
-]
+# Delay between API calls (seconds)
+API_DELAY = 15
 
 # =============================================================================
-# ANTHROPIC CLIENT WITH WEB SEARCH
+# ANTHROPIC CLIENT
 # =============================================================================
 
 def create_client():
@@ -87,165 +59,142 @@ def create_client():
     return anthropic.Anthropic(api_key=api_key)
 
 
-def search_with_claude(client, query: str, context: str = "") -> dict:
-    """
-    Use Claude with web search to find ESG real estate content.
-    """
+def search_with_claude(client, query: str) -> dict:
+    """Use Claude with web search to find ESG real estate content."""
     
-    system_prompt = """You are an ESG real estate research assistant. 
-    Your task is to search for and collect relevant news, research, and regulatory updates
-    about ESG (Environmental, Social, Governance) topics in the real estate sector.
-    
-    Focus on:
-    - Carbon emissions and net zero targets
-    - Energy efficiency regulations
-    - Climate risk and stranded assets
-    - ESG reporting requirements (CSRD, SFDR, etc.)
-    - Green finance and sustainable investment
-    - Building certifications (BREEAM, LEED, GRESB)
-    - PropTech innovations for sustainability
-    
-    When searching, prioritize:
-    - Recent content (past 7 days)
-    - Reputable sources (Reuters, Bloomberg, property press, regulatory bodies)
-    - Actionable information for investors and asset managers
-    """
-    
-    user_prompt = f"""Search for: {query}
-
-    {context}
-    
-    Find relevant articles from the past week. For each result, extract:
-    1. Title
-    2. Source/publication
-    3. URL
-    4. Key insight (1-2 sentences)
-    5. Relevance score (0-1) for ESG in real estate
-    
-    Return results as JSON array."""
+    print(f"    Waiting {API_DELAY}s before search...")
+    time.sleep(API_DELAY)
     
     response = client.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=4096,
+        max_tokens=2048,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
         messages=[
-            {"role": "user", "content": user_prompt}
-        ],
-        system=system_prompt
-    )
-    
-    return response
+            {
+                "role": "user", 
+                "content": f"""Search for: {query}
 
+Find 3-5 relevant articles from the past week about ESG in real estate.
+For each result, provide:
+1. Title
+2. Source
+3. URL  
+4. Key insight (1-2 sentences)
 
-def analyze_results(client, all_results: list) -> dict:
-    """
-    Analyze collected results and prepare digest content.
-    """
-    
-    analysis_prompt = f"""Analyze these ESG real estate search results from the past week:
-
-{json.dumps(all_results, indent=2)}
-
-Provide a structured analysis:
-
-1. **Top Stories** (5 most important items):
-   - Title, source, URL
-   - Why it matters (2-3 sentences)
-   - Theme category
-
-2. **Theme Summary**:
-   For each theme that appears, list count and key highlights:
-   - carbon_emissions
-   - energy_efficiency
-   - climate_risk
-   - regulation_compliance
-   - green_finance
-   - certification_ratings
-   - proptech_innovation
-
-3. **Regulatory Alerts**:
-   Any compliance deadlines or new requirements
-
-4. **Key Statistics**:
-   Notable numbers/data points mentioned
-
-5. **Geographic Distribution**:
-   Breakdown by UK, EU, US, Global
-
-Return as structured JSON."""
-
-    response = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=4096,
-        messages=[
-            {"role": "user", "content": analysis_prompt}
+Focus on: carbon emissions, energy efficiency, climate risk, regulations, green finance, certifications, PropTech."""
+            }
         ]
     )
     
     return response
 
 
-def generate_digest(client, analysis: str, week_start: str, week_end: str) -> str:
-    """
-    Generate the final weekly digest.
-    """
+def analyze_results(client, all_results: list) -> str:
+    """Analyze collected results."""
     
-    digest_prompt = f"""Based on this analysis of ESG real estate news from {week_start} to {week_end}:
+    print(f"  Waiting {API_DELAY}s before analysis...")
+    time.sleep(API_DELAY)
+    
+    # Summarize results for analysis
+    results_summary = []
+    for r in all_results:
+        if r.get("response"):
+            results_summary.append(f"Category: {r['category']}\nQuery: {r['query']}\nResults: {r['response'][:2000]}")
+    
+    results_text = "\n\n---\n\n".join(results_summary)
+    
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=3000,
+        messages=[
+            {
+                "role": "user",
+                "content": f"""Analyze these ESG real estate search results and identify:
 
+1. Top 5 most important stories
+2. Key themes (carbon, energy, regulation, finance, etc.)
+3. Any regulatory deadlines or alerts
+4. Geographic breakdown (UK, EU, US, Global)
+
+Results:
+{results_text}
+
+Provide a structured summary."""
+            }
+        ]
+    )
+    
+    # Extract text
+    analysis = ""
+    for block in response.content:
+        if hasattr(block, 'text'):
+            analysis += block.text
+    
+    return analysis
+
+
+def generate_digest(client, analysis: str, week_start: str, week_end: str) -> str:
+    """Generate the weekly digest."""
+    
+    print(f"  Waiting {API_DELAY}s before generating digest...")
+    time.sleep(API_DELAY)
+    
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=4000,
+        messages=[
+            {
+                "role": "user",
+                "content": f"""Create a weekly ESG Real Estate digest for {week_start} - {week_end}.
+
+Based on this analysis:
 {analysis}
 
-Generate a professional weekly digest with these sections:
+Use this format:
 
 # ESG in Real Estate Weekly Digest
 ## {week_start} - {week_end}
 
 ## Executive Summary
-(150 words - top developments and key theme of the week)
+(Top 3-5 developments in 150 words)
 
-## 📰 News Highlights  
-(400 words - major announcements, market movements, company initiatives)
+## News Highlights
+(Major announcements and market movements)
 
-## 📋 Regulatory Updates
-(300 words - new/proposed regulations, compliance deadlines, guidance)
+## Regulatory Updates
+(Policy changes and compliance deadlines)
 
-## 📊 Research & Reports
-(300 words - new studies, data releases, benchmark updates)
+## Research & Reports
+(New studies and data)
 
-## 💹 Market Developments
-(300 words - green finance deals, transactions, PropTech)
+## Market Developments
+(Deals, PropTech, transactions)
 
-## 🎯 Implications
+## Implications
 
 ### For Investors
-(Key implications for real estate investors)
+(Key investment implications)
 
 ### For Asset Managers
-(Key implications for property/asset managers)
+(Operational implications)
 
 ### For ESG Consultants
-(Key implications for ESG reporting and advisory - consider Plinthos-type services)
+(Advisory and reporting implications)
 
 ## Sources
-(List all sources cited with links)
+(List sources with links)
 
-Write in a professional but accessible tone. Include specific data points where available.
-Make implications actionable and concrete."""
-
-    response = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=8192,
-        messages=[
-            {"role": "user", "content": digest_prompt}
+Write professionally but accessibly. Include specific data where available."""
+            }
         ]
     )
     
-    # Extract text from response
-    digest_text = ""
+    digest = ""
     for block in response.content:
         if hasattr(block, 'text'):
-            digest_text += block.text
+            digest += block.text
     
-    return digest_text
+    return digest
 
 
 # =============================================================================
@@ -293,10 +242,10 @@ def save_to_database(week_ending: str, content: str):
 # =============================================================================
 
 def run_monitor(days_back: int = 7):
-    """Run the complete monitoring workflow."""
+    """Run the monitoring workflow with rate limit protection."""
     
     print("=" * 60)
-    print("ESG in Real Estate Weekly Monitor (API Version)")
+    print("ESG in Real Estate Weekly Monitor")
     print("=" * 60)
     
     # Calculate date range
@@ -307,12 +256,13 @@ def run_monitor(days_back: int = 7):
     week_ending_str = end_date.strftime("%Y-%m-%d")
     
     print(f"Period: {week_start} - {week_end}")
+    print(f"API delay between calls: {API_DELAY} seconds")
     print("-" * 60)
     
     # Initialize client
     client = create_client()
     
-    # Step 1: Search all categories
+    # Step 1: Search (with delays)
     print("\n[1/3] Searching sources...")
     all_results = []
     
@@ -321,40 +271,46 @@ def run_monitor(days_back: int = 7):
         for query in queries:
             print(f"    Searching: {query}")
             try:
-                result = search_with_claude(
-                    client, 
-                    query,
-                    f"Looking for content from the past {days_back} days."
-                )
+                result = search_with_claude(client, query)
+                
+                # Extract text from response
+                response_text = ""
+                for block in result.content:
+                    if hasattr(block, 'text'):
+                        response_text += block.text
+                
                 all_results.append({
                     "category": category,
                     "query": query,
-                    "response": str(result.content)
+                    "response": response_text
                 })
+                print(f"    ✓ Got results")
+                
             except Exception as e:
-                print(f"    Error: {e}")
+                print(f"    ✗ Error: {e}")
+                all_results.append({
+                    "category": category,
+                    "query": query,
+                    "response": f"Error: {str(e)}"
+                })
     
-    # Step 2: Analyze results
+    # Step 2: Analyze
     print("\n[2/3] Analyzing results...")
-    analysis_response = analyze_results(client, all_results)
-    analysis_text = ""
-    for block in analysis_response.content:
-        if hasattr(block, 'text'):
-            analysis_text += block.text
+    analysis = analyze_results(client, all_results)
+    print("  ✓ Analysis complete")
     
     # Step 3: Generate digest
     print("\n[3/3] Generating digest...")
-    digest = generate_digest(client, analysis_text, week_start, week_end)
+    digest = generate_digest(client, analysis, week_start, week_end)
+    print("  ✓ Digest generated")
     
     # Save outputs
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Save markdown
     md_path = OUTPUT_DIR / f"esg_re_digest_{week_ending_str}.md"
     md_path.write_text(digest)
     print(f"\nSaved: {md_path}")
     
-    # Save to database
     save_to_database(week_ending_str, digest)
     print(f"Database updated: {DATABASE_PATH}")
     
@@ -370,16 +326,8 @@ def run_monitor(days_back: int = 7):
 # =============================================================================
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="ESG Real Estate Weekly Monitor (API Version)"
-    )
-    parser.add_argument(
-        "--days",
-        type=int,
-        default=7,
-        help="Number of days to look back (default: 7)"
-    )
-    
+    parser = argparse.ArgumentParser(description="ESG Real Estate Weekly Monitor")
+    parser.add_argument("--days", type=int, default=7, help="Days to look back")
     args = parser.parse_args()
     run_monitor(args.days)
 
