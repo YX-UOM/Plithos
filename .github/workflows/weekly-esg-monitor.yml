@@ -30,12 +30,5 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git add -A
-          git diff --staged --quiet || git commit -m "📊 ESG digest $(date +%Y-%m-%d)"
-          git push
-- name: Commit digest
-        run: |
-          git config user.email "action@github.com"
-          git config user.name "GitHub Action"
-          git add -A
-          git diff --staged --quiet || git commit -m "📊 ESG digest $(date +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "ESG digest"
           git push
